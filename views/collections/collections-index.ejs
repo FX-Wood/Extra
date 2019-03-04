@@ -3,7 +3,7 @@
 <div class="container">
     <h3>User</h3>
     <img class="left" src="<%- profileImage %>" alt="user profile image">
-    <p>User name: [placeholder]</p>
+    <p>User name: <%= currentUser.name %></p>
     <p>Number of collections: [placeholder]</p>
     <p>Number of cards: [placeholder]</p>
 </div>
@@ -11,7 +11,7 @@
 <div class="container">
     <h3>Collections</h3>
     <form action="/collections/new" method="GET">
-        <button type="submit" id="add-collection" class="large"> 
+        <button class="btn-large" type="submit" id="add-collection" > 
             <i class="material-icons left">
                 add
             </i>

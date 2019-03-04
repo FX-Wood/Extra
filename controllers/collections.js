@@ -10,14 +10,14 @@ router.use(isLoggedIn);
 router.route('/')
     // GET index
     .get((req,res) => {
-        res.send('you are at collections/index for user');
+        res.render('collections/collections-index');
     })
     // POST new collection
     .post((req,res) => {
         res.send('you just created a collection');
     })
 
-router.route('/:id')
+router.route('/:id[0-9]+')
     // GET one collection
     .get((req,res) => {
         res.send('you are at collections/show for a single collection' + req.params.id);
