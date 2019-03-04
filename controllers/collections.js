@@ -14,8 +14,11 @@ router.route('/')
     })
     // POST new collection
     .post((req,res) => {
-        res.send('you just created a collection');
+        db.collection.create({name: "New Collection"})
+        .then(collection => {
+            res.send(collection)
     })
+})
 
 router.route('/:id[0-9]+')
     // GET one collection
