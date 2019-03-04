@@ -1,4 +1,5 @@
 'use strict';
+const password = require('bcrypt').hashSync('password', 12)
 
 
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
         id: '1', 
         name: 'q',
         email: 'q@q.qq',
-        password: 'password',
+        password: password,
         updatedAt: new Date(),
         createdAt: new Date()
       },
@@ -16,13 +17,13 @@ module.exports = {
         id: '2',
         name: 'asdf',
         email: 'asdf@asdf.asdf',
-        password: 'password',
+        password: password,
         updatedAt: new Date(),
         createdAt: new Date()
       }
     ])
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('users', {where: {}})
+    return queryInterface.bulkDelete('users', {})
   }
 };

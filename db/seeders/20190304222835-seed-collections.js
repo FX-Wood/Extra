@@ -28,6 +28,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    queryInterface.bulkDelete('collections', {where: {}})
+    return queryInterface.bulkDelete('collections', {})
   }
 };
