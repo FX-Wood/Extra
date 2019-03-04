@@ -44,6 +44,7 @@ app.use(passport.session());
 app.use(function(req,res,next) {
   res.locals.alerts = req.flash();
   res.locals.currentUser = req.user;
+  res.locals.profileImage = 'https://via.placeholder.com/150'
   next()
 })
 
@@ -56,6 +57,8 @@ app.get('/profile', isLoggedIn, function(req, res) {
 });
 
 app.use('/auth', require('./controllers/auth'));
+app.use('/collections', require('./controllers/collections'));
+app.use('/card', require('./controllers/card'));
 
 var server = app.listen(process.env.PORT || 3000);
 
