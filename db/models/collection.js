@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const collection = sequelize.define('collection', {
     name: DataTypes.STRING,
+    description: DataTypes.STRING,
     userId: DataTypes.INTEGER
   }, {});
   collection.associate = function(models) {

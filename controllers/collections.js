@@ -10,7 +10,13 @@ router.use(isLoggedIn);
 router.route('/')
     // GET index
     .get((req,res) => {
-        res.render('collections/collections-index');
+        db.user.findOne({
+            where: {id: req.user.id},
+            include: [db.collection]
+        })
+        .then(user => {
+            res.render('collections/collections-index', {user});
+        })
     })
     // POST new collection
     .post((req,res) => {

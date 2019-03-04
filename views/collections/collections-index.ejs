@@ -17,3 +17,17 @@
             Add a collection
         </a>
 </div>
+<div id="collections">
+    <% user.collections.forEach(set => { %>
+        <div class="card hoverable">
+            <div class="card-content">
+                <span class="card-title">
+                    <%= set.name %>
+                </span>
+                <p>
+                    <%= set.description%>
+                </p>
+            </div>
+        </div>
+    <% }) %>
+</div>
