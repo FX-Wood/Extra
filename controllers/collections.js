@@ -42,15 +42,11 @@ router.route('/:id([0-9]+)')
     .put((req,res) => {
         db.collection.findByPk(req.params.id)
             .then(collection => {
-                console.log('this is the first then block')
-                console.log('this is what was returned:', collection)
                 collection.name = req.body.title;
                 collection.description = req.body.description;
                 return collection.save()
             })
             .then(collection => {
-                console.log('in the last then')
-                console.log('this is what was returned:', collection)
                 res.send(collection);
             })
 
