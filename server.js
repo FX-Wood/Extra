@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const ejsLayouts = require('express-ejs-layouts');
-const bodyParser = require('body-parser');
 const db = require('./db/models');
 const app = express();
 const passport = require('./config/passportConfig');
@@ -16,7 +15,8 @@ app.set('view engine', 'ejs');
 
 app.use(require('morgan')('dev'));
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json())
 app.use(ejsLayouts);
 app.use(helmet())
 

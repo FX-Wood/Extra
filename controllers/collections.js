@@ -12,7 +12,10 @@ router.route('/')
     .get((req,res) => {
         db.user.findOne({
             where: {id: req.user.id},
-            include: [db.collection]
+            include: [{
+                model: db.collection,
+                order: ['updatedAt', 'ASC']
+            }],
         })
         .then(user => {
             res.render('collections/collections-index', {user});
@@ -30,14 +33,28 @@ router.route('/')
     })
 })
 
-router.route('/:id[0-9]+')
+router.route('/:id([0-9]+)')
     // GET one collection
     .get((req,res) => {
         res.send('you are at collections/show for a single collection' + req.params.id);
     })
     // PUT edit one collection
     .put((req,res) => {
-        res.send('you have edited a single collection' + req.params.id);
+        db.collection.findByPk(req.params.id)
+            .then(collection => {
+                console.log('this is the first then block')
+                console.log('this is what was returned:', collection)
+                collection.name = req.body.title;
+                collection.description = req.body.description;
+                return collection.save()
+            })
+            .then(collection => {
+                console.log('in the last then')
+                console.log('this is what was returned:', collection)
+                res.send(collection);
+            })
+
+
     })
     // DELETE one collection
     .delete((req,res) => {
