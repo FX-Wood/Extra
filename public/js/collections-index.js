@@ -56,15 +56,21 @@ function editCollection(target) {
     })
     // create a 'done' button
     let done = document.createElement('button');
-    done.classList.add('btn', 'right', 'btn-floating')
-    done.addEventListener('click', doneClick)
-    target.firstElementChild.appendChild(done)
+        done.classList.add('btn', 'right');
+        done.addEventListener('click', doneClick);
+        done.textContent = "Done editing";
+    let icon = document.createElement('i')
+        icon.textContent = 'check';
+        icon.classList.add('material-icons','left');
+        done.appendChild(icon)
+
+    target.firstElementChild.insertAdjacentElement('afterbegin', done)
 }
 
 function doneClick(e) {
     let card = e.target.parentElement.parentElement
     // remove button
-    e.target.parentElement.removeChild(e.target)
+    e.currentTarget.parentElement.removeChild(e.currentTarget)
     // make content uneditable
     Array.from(card.firstElementChild.children).forEach(child => {
         child.contentEditable = false;

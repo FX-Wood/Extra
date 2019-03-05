@@ -1,0 +1,6 @@
+/* collections-index */
+
+[contenteditable],
+[contenteditable]:focus {
+    outline: none;
+}
