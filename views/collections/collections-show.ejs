@@ -1,4 +1,4 @@
-<h1><%= collection.name %> <a href="/cards/new" class="btn">Add a new card</a> </h1>
+<h1><%= collection.name %> <a href="/cards/new" class="btn">Add a new card</a> <a href="#delete-collection-modal" class="btn red modal-trigger">Delete this collection</a> </h1>
 
 <div>
 <%  if (collection.cards) {%>
@@ -14,3 +14,32 @@
     <% }) %>
 <% } %>
 </div>
+
+<div id="delete-collection-modal" class="modal">
+    <div class="modal-content">
+        <h3>Are you sure? <button class=".modal-close"><i class=" material-icons">close</i></button></h3>
+        <p> Delete the collection </p>
+        <div class="card">
+            <div class="card-content">
+                <p><span class="card-title"><%= collection.name %> </span></p>
+                <p><%= collection.description  %></p>
+            </div>
+        </div>
+        <button id="DELETE-COLLECTION" class="btn">confirm delete</button>
+    </div>
+</div>
+
+<script>
+var url = "<%= '/collections/' + collection.id %>"
+var deleteModal
+document.addEventListener('DOMContentLoaded', function(e) {
+    deleteModal = M.Modal.init(document.querySelector('#delete-collection-modal'))
+    document.getElementById('DELETE-COLLECTION')
+    .addEventListener('click', (e) => {
+        fetch(url, {method: 'DELETE'})
+        .then(window.location = '/collections')
+        .catch(error => console.info(error))
+        deleteModal.close()
+    })
+})
+</script>
