@@ -1,14 +1,22 @@
 <h1><%= collection.name %> <a href="/cards/new" class="btn">Add a new card</a> <a href="#delete-collection-modal" class="btn red modal-trigger">Delete this collection</a> </h1>
 
-<div>
+<div class="container">
 <%  if (collection.cards) {%>
     <% collection.cards.forEach(card => { %>
         <div class="row">
-            <div class="front">
-                <%= card.front   %>
+            <div class="col s12 m6">
+                <div class="card show-collection-card front">
+                    <div class="card-content">
+                        <span class="card-title"><%= card.front   %></span>
+                    </div>
+                </div>
             </div>
-            <div class="back">
-                <%= card.back %>
+            <div class="col s12 m6">
+                <div class="card show-collection-card back">
+                    <div class="card-content">
+                        <p><%= card.back %></p>
+                    </div>
+                </div>
             </div>
         </div>
     <% }) %>
@@ -21,8 +29,16 @@
         <p> Delete the collection </p>
         <div class="card">
             <div class="card-content">
-                <p><span class="card-title"><%= collection.name %> </span></p>
-                <p><%= collection.description  %></p>
+                <div class="card">
+                    <div class="card-content">
+                        <p><span class="card-title"><%= collection.name %> </span></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-title"><%= collection.description  %></p>
+                    </div>
+                </div>
             </div>
         </div>
         <button id="DELETE-COLLECTION" class="btn">confirm delete</button>

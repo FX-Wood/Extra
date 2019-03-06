@@ -21,3 +21,13 @@
 .collections-index-select-btn {
     margin: 2px 0;
 }
+
+.show-collection-card {
+    height: 14vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.show-collection-card.front {
+    align-items: center;
+}
