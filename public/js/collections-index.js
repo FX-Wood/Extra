@@ -37,7 +37,8 @@ function mouseDownEditCheck(e) {
     let timer = setTimeout(() => {
         console.log('timeout')
         editCollection(target)
-    }, 1100)
+        target.scrollIntoView()
+    }, 800)
     window.addEventListener('mouseup', (e) => {
         console.log('mouseup')
         clearTimeout(timer)
@@ -90,9 +91,9 @@ function editCollection(target) {
 
 function doneClick(e) {
     //        button, button container, card-content container, card
-    let card = e.target.parentElement.parentElement.parentElement
+    let card = e.currentTarget.parentElement.parentElement.parentElement
     // remove button
-    e.currentTarget.parentElement.parentElement.removeChild(e.currentTarget)
+    e.currentTarget.parentElement.parentElement.removeChild(e.currentTarget.parentElement)
 
     // make content uneditable
     Array.from(card.firstElementChild.children).forEach(child => {
