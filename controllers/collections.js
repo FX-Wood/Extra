@@ -78,6 +78,7 @@ router.route('/:id([0-9]+)')
             res.send('You deleted collection #', req.params.id)
         }).catch(err => {
             console.log(err)
+            res.status(500).send('There was a server-side error!')
         })
     })
 router.get('/new', (req,res) => {
