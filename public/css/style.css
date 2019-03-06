@@ -17,3 +17,7 @@
 .form-width {
     min-width: 50vw
 }
+
+.collections-index-select-btn {
+    margin: 2px 0;
+}

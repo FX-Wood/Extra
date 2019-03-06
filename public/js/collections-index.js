@@ -54,23 +54,46 @@ function editCollection(target) {
     Array.from(target.firstElementChild.children).forEach(child => {
         child.contentEditable = true;
     })
+
+    // create a container for the buttons
+    let buttonBox = document.createElement('div');
+        buttonBox.classList.add('right', )
+    target.firstElementChild.insertAdjacentElement('afterbegin', buttonBox)
+
+    // create a 'visit collection' button
+    let show = document.createElement('a');
+        show.classList.add('btn', 'collections-index-select-btn');
+        show.href = "/collections/" + target.id.slice(3)
+        show.textContent = "visit collection";
+    let sIcon = document.createElement('i')
+        sIcon.textContent = 'chevron_right';
+        sIcon.classList.add('material-icons','left');
+        show.appendChild(sIcon)
+    buttonBox.appendChild(show)
+
+    // create a line break element for the buttons
+    let buttonLineBreak = document.createElement('br')
+        buttonLineBreak.classList.add('button-br')
+    buttonBox.appendChild(buttonLineBreak)
+
     // create a 'done' button
     let done = document.createElement('button');
-        done.classList.add('btn', 'right');
+        done.classList.add('btn', 'collections-index-select-btn');
         done.addEventListener('click', doneClick);
         done.textContent = "Done editing";
     let icon = document.createElement('i')
         icon.textContent = 'check';
         icon.classList.add('material-icons','left');
         done.appendChild(icon)
-
-    target.firstElementChild.insertAdjacentElement('afterbegin', done)
+    buttonBox.appendChild(done)
 }
 
 function doneClick(e) {
-    let card = e.target.parentElement.parentElement
+    //        button, button container, card-content container, card
+    let card = e.target.parentElement.parentElement.parentElement
     // remove button
-    e.currentTarget.parentElement.removeChild(e.currentTarget)
+    e.currentTarget.parentElement.parentElement.removeChild(e.currentTarget)
+
     // make content uneditable
     Array.from(card.firstElementChild.children).forEach(child => {
         child.contentEditable = false;
