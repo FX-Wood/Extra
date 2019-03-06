@@ -12,7 +12,7 @@
     <title>Extra</title>
     </head>
     <body>
-    <h1>Extra</h1>
+    <%- include('partials/nav')%>
     <div class="container">
     <%- JSON.stringify(currentUser) %>
     </div>
@@ -26,6 +26,6 @@
       M.AutoInit()
     })
     </script>
-    <% include partials/alerts %>
+    <%- include('partials/alerts') %>
     </body>
 </html>
