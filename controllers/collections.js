@@ -19,6 +19,9 @@ router.route('/')
         })
         .then(user => {
             res.render('collections/collections-index', {user});
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send('There was a server-side error!')
         })
     })
     // POST new collection
@@ -30,7 +33,11 @@ router.route('/')
         })
         .then(collection => {
             res.send(collection)
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send('There was a server-side error!')
     })
+
 })
 
 router.route('/:id([0-9]+)')
@@ -40,6 +47,9 @@ router.route('/:id([0-9]+)')
             include: [db.card]
         }).then(collection => {
             res.render('collections/collections-show', {collection})
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send('There was a server-side error!')
         })
     })
     // PUT edit one collection
@@ -53,12 +63,22 @@ router.route('/:id([0-9]+)')
             .then(collection => {
                 res.send(collection);
             })
+            .catch(err => {
+                console.log(err)
+                res.status(500).send('There was a server-side error!')
+            })
     })
     // DELETE one collection
     .delete((req,res) => {
-        console.log('got a delete request')
-        console.log('deleting collection number ' + req.params.id)
-        res.redirect('/collections');
+        db.collection.destroy({
+            where: {id: req.params.id}
+        }).then(result => {
+            console.log('User deleted collection #' + req.params.id)
+            console.log('this was returned from the db:', result)
+            res.send('You deleted collection #', req.params.id)
+        }).catch(err => {
+            console.log(err)
+        })
     })
 router.get('/new', (req,res) => {
     res.send('this is a new collection form')
