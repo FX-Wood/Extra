@@ -17,7 +17,7 @@
 
 <div id="delete-collection-modal" class="modal">
     <div class="modal-content">
-        <h3>Are you sure? <button class=".modal-close"><i class=" material-icons">close</i></button></h3>
+        <h3>Are you sure? <button class=".modal-close btn-flat right" onclick=deleteModal.close()><i class=" material-icons">close</i></button></h3>
         <p> Delete the collection </p>
         <div class="card">
             <div class="card-content">
@@ -31,15 +31,6 @@
 
 <script>
 var url = "<%= '/collections/' + collection.id %>"
-var deleteModal
-document.addEventListener('DOMContentLoaded', function(e) {
-    deleteModal = M.Modal.init(document.querySelector('#delete-collection-modal'))
-    document.getElementById('DELETE-COLLECTION')
-    .addEventListener('click', (e) => {
-        fetch(url, {method: 'DELETE'})
-        .then(window.location = '/collections')
-        .catch(error => console.info(error))
-        deleteModal.close()
-    })
-})
+
 </script>
+<script src="/js/collections-show.js"></script>
