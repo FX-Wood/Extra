@@ -36,7 +36,11 @@ router.route('/')
 router.route('/:id([0-9]+)')
     // GET one collection
     .get((req,res) => {
-        res.send('you are at collections/show for a single collection' + req.params.id);
+        db.collection.findByPk(req.params.id,{
+            include: [db.card]
+        }).then(collection => {
+            res.render('collections/collections-show', {collection})
+        })
     })
     // PUT edit one collection
     .put((req,res) => {
@@ -49,8 +53,6 @@ router.route('/:id([0-9]+)')
             .then(collection => {
                 res.send(collection);
             })
-
-
     })
     // DELETE one collection
     .delete((req,res) => {

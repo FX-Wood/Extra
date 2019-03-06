@@ -1,0 +1,17 @@
+<h1><%= collection.name %></h1>
+
+
+<div>
+<%  if (collection.cards) {%>
+    <% collection.cards.forEach(card => { %>
+        <div class="row">
+            <div class="front">
+                <%= card.front   %>
+            </div>
+            <div class="back">
+                <%= card.back %>
+            </div>
+        </div>
+    <% }) %>
+<% } %>
+</div>
