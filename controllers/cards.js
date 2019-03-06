@@ -10,7 +10,15 @@ router.route('/')
         res.send('you are at the collections page, this will show an index of collections')
     })
     .post((req,res) => {
-        res.send('you are at the cards make a new card route')
+        db.card.create({
+            front: req.body.front,
+            back: req.body.back,
+            collectionId: req.body.collectionId
+        }).then(card => {
+            res.send(req.body)
+        }).catch(err => {
+            res.status(500).send('There was a server-side error')
+        })
     })
 
 router.get('/new', (req,res) => {
