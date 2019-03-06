@@ -4,3 +4,8 @@
 [contenteditable]:focus {
     outline: none;
 }
+
+.new-card {
+    min-height: 25vh;
+    justify-content: center;
+}
