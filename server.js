@@ -59,7 +59,7 @@ app.get('/profile', isLoggedIn, function(req, res) {
 app.use('/auth', require('./controllers/auth'));
 app.use('/collections', require('./controllers/collections'));
 app.use('/cards', require('./controllers/cards'));
-
+app.use('/define', require('./controllers/twinword'));
 var server = app.listen(process.env.PORT || 3000);
 
 module.exports = server;
