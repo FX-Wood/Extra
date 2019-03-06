@@ -9,3 +9,11 @@
     min-height: 25vh;
     justify-content: center;
 }
+
+.full-page-content {
+    min-height: 65vh
+}
+
+.form-width {
+    min-width: 50vw
+}
