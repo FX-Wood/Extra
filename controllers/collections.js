@@ -56,7 +56,9 @@ router.route('/:id([0-9]+)')
     })
     // DELETE one collection
     .delete((req,res) => {
-        res.send('you have deleted a collection' + req.params.id);
+        console.log('got a delete request')
+        console.log('deleting collection number ' + req.params.id)
+        res.redirect('/collections');
     })
 router.get('/new', (req,res) => {
     res.send('this is a new collection form')
