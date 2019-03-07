@@ -19,7 +19,11 @@ function addCardHandler(e) {
 }
 
 document.addEventListener('DOMContentLoaded', function(e) {
+    // initialize 'select collection' dropdown
     M.FormSelect.init(document.getElementById('collection-picker'))
     document.getElementById('add-card-to-collection-btn')
     .addEventListener('click', addCardHandler)
+
+    // initialize floating action button
+    M.FloatingActionButton.init(document.getElementById('settings-fab'))
 })
