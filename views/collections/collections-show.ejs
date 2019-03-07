@@ -1,4 +1,4 @@
-<h1><%= collection.name %> <a href="/cards/new" class="btn">Add a new card</a> <a href="#delete-collection-modal" class="btn red modal-trigger">Delete this collection</a> </h1>
+<h1><%= collection.name %> <a href="/cards/new?collectionId=<%=collection.id%>" class="btn">Add a new card</a> <a href="#delete-collection-modal" class="btn red modal-trigger">Delete this collection</a> </h1>
 
 <div class="container">
 <%  if (collection.cards) {%>

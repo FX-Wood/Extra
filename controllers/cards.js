@@ -21,12 +21,12 @@ router.route('/')
         })
     })
 
-router.get('/new', (req,res) => {
-    console.log('here', 'userId', req.user.id)
+router.get('/new/', (req,res) => {
+    let referer = req.query.collectionId
     db.user.findByPk(req.user.id,{
         include: [db.collection]
     })
-    .then(user => res.render('cards/cards-new', {user}))
+    .then(user => res.render('cards/cards-new', {user, referer}))
     .catch(error => {
         console.log(error)
     })
