@@ -14,14 +14,12 @@ router.get('/:word', (req, res) => {
         }
     }
     let callback = function(error, response, body) {
-        console.log(Object.keys(response))
-        console.log(response.headers)
-        console.log(process.env.X_RAPID_API_KEY)
-        console.log(response.body)
         if (!error & response.statusCode === 200) {
-            res.json(JSON.parse(body))
+            res.send(body)
+        } else if (!error & response.statusCode === 404){
+            res.status(404).send('word not found')
         } else {
-            res.json(error)
+            res.status(500).send('An error occurred')
         }
     }
     request(options, callback)

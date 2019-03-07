@@ -8,7 +8,7 @@
     <div class="input-field <%= inputCols %>">
         <select name="collection-picker" id="collection-picker">
             <%user.collections.forEach(collection => { %>
-            <option value="<%= collection.id %>"> <%= '[' + collection.id + '] ' + collection.name%></option>
+            <option <%= collection.id == referer? 'selected=""' : '' %> value="<%= collection.id %>"> <%=collection.name%></option>
             <% }) %>
         </select>
         <label for="collection-picker">Choose A collection</label>
@@ -18,7 +18,7 @@
 
 </div>
 
-<div class="row">
+<div id="card-row" class="row">
     
     <div class="col s12 m6">
         <div class="card new-card valign-wrapper">
@@ -45,7 +45,7 @@
         </i>
     </button>
     <ul>
-        <li><button id="wordsAPI" class="btn-floating blue-grey-darken-4 tooltipped" data-position="left" data-tooltip="dictionary definition">
+        <li><button id="wordsAPI-btn" class="btn-floating blue-grey-darken-4 tooltipped" data-position="left" data-tooltip="dictionary definition">
                 <i class="material-icons">text_rotation_none</i>
             </button>
         </li>
