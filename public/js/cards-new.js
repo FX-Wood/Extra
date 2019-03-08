@@ -125,9 +125,12 @@ toast any errors
 
 */
 function handleMarkdown(e) {
+    let source = document.getElementById(e.target.dataset.source)
     console.log('detecting markdown event')
-    console.log('target', e.target)
-    let md = e.target.value
+    console.log('etarget', e.target)
+    console.log('target data', e.target.dataset.source)
+    console.log('target', document.getElementById(e.target.dataset.source))
+    let md = source.firstElementChild.value
     console.log('fetching rendered markdown')
     console.log(JSON.stringify({md}))
     fetch('/parsemd', {
@@ -141,7 +144,10 @@ function handleMarkdown(e) {
         return reply.text()
     }).then(data => {
         console.log('data', data)
-        e.target.parentElement.nextElementSibling.innerHTML = data
+        data = data.replace('<pre><code', '<?prettify?><pre><code')
+        source.nextElementSibling.innerHTML = data
+
+        PR.prettyPrint();
     }).catch(err => M.toast({html:err}))
 }
 
@@ -174,7 +180,8 @@ function createMarkdownEditor(target, id) {
     let linkB = document.createElement('a');
         linkB.textContent = 'preview'
         linkB.href = '#' + id + '-preview'
-        linkB.addEventListener('click', PR.prettyPrint)
+        linkB.dataset.source = id + '-md';
+        linkB.addEventListener('click', handleMarkdown)
     let iconB = document.createElement('i')
         iconB.classList.add('material-icons')
         iconB.textContent = 'visibility'
@@ -187,7 +194,6 @@ function createMarkdownEditor(target, id) {
         markdown.classList.add('col', 's12', 'md-wrap')
     let mdText = document.createElement('textarea')
         mdText.classList.add('mdText')
-        mdText.addEventListener('input', handleMarkdown)
     markdown.appendChild(mdText)
     target.appendChild(markdown)
 
@@ -211,16 +217,16 @@ function createMarkdownEditor(target, id) {
         if (e.key === 'Tab') {
             e.preventDefault()
             let text = e.target.value
+            console.log({start: text.selectionStart, end: text.selectionEnd,len: text.length })
             let start = text.substring(0, e.target.selectionStart)
             let end = text.substring(e.target.selectionEnd, text.length);
             e.target.value = start + '\t' + end
+            e.target.selectionStart = start.length + 1;
+            e.target.selectionEnd = text.length - end.length + 1;
         }
     })
     return M.Tabs.init(ul)
 }
-
-
-
 
 function mutateCards() {
     console.log('mutating cards')
@@ -232,10 +238,6 @@ function mutateCards() {
         }
         createMarkdownEditor(card, i)
     })
-}
-
-function markdownHandler(e) {
-
 }
 
 document.addEventListener('DOMContentLoaded', function(e) {
