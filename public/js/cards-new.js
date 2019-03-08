@@ -1,3 +1,16 @@
+/*
+This section will include:
+addCard(): makes a new card template
+
+
+
+
+*/
+
+function addCard() {
+    document.getElementById('house-of-cards').innerHTML += ('<div class="row"><div class="card-row col s12 m6"><div class="card-front card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align" id="back"> Back of card</span></div></div></div>')
+}
+
 function addCardHandler(e) {
     console.log('here')
     let front = document.getElementById('front').innerText
@@ -252,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     // initialize floating action button
     let fab = document.getElementById('settings-fab')
     M.FloatingActionButton.init(fab)
-
+    fab.addEventListener('click', addCard)
     // initialize tooltips
     fabTooltips = fab.querySelectorAll('.tooltipped')
     M.Tooltip.init(fabTooltips, {position: 'left', enterDelay: 100})
