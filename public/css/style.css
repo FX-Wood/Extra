@@ -31,3 +31,9 @@
 .show-collection-card.front {
     align-items: center;
 }
+
+textarea {
+    border: none;
+    outline: none;
+    resize: none;
+}
