@@ -1,3 +1,5 @@
+NUMBER_OF_CARDS = 1;
+TABS_INSTANCES = [];
 /*
 This section will include:
 addCard(): makes a new card template
@@ -8,7 +10,10 @@ addCard(): makes a new card template
 */
 
 function addCard() {
-    document.getElementById('house-of-cards').innerHTML += ('<div class="row"><div class="card-row col s12 m6"><div class="card-front card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align" id="back"> Back of card</span></div></div></div>')
+    // makes a new card and returns the id of its container
+    console.log('adding card')
+    document.getElementById('house-of-cards').innerHTML += ('<div id="row-' + ++NUMBER_OF_CARDS +'" class="row"><div class="card-row col s12 m6"><div class="card-front card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align"> Back of card</span></div></div></div>')
+    return 'row-' + NUMBER_OF_CARDS
 }
 
 function addCardHandler(e) {
@@ -138,9 +143,9 @@ toast any errors
 
 */
 function handleMarkdown(e) {
-    let source = document.getElementById(e.target.dataset.source)
+    let source = document.getElementById(e.currentTarget.dataset.source)
     console.log('detecting markdown event')
-    console.log('etarget', e.target)
+    console.log('etarget', e.target, 'currentTarget', e.currentTarget)
     console.log('target data', e.target.dataset.source)
     console.log('target', document.getElementById(e.target.dataset.source))
     let md = source.firstElementChild.value
@@ -172,13 +177,13 @@ function createMarkdownEditor(target, id) {
     row.appendChild(col);
 
     let ul = document.createElement('ul');
+        ul.id = id + '-ul'
         ul.classList.add('tabs');
     col.appendChild(ul)
     
     let tabA = document.createElement('li');
         tabA.classList.add('tab', 'col', 's6');
     let linkA = document.createElement('a');
-        linkA.classList.add('active')
         linkA.textContent = 'markdown'
         linkA.href = '#' + id + '-md'
     let iconA = document.createElement('i')
@@ -194,7 +199,6 @@ function createMarkdownEditor(target, id) {
         linkB.textContent = 'preview'
         linkB.href = '#' + id + '-preview'
         linkB.dataset.source = id + '-md';
-        linkB.addEventListener('click', handleMarkdown)
     let iconB = document.createElement('i')
         iconB.classList.add('material-icons')
         iconB.textContent = 'visibility'
@@ -238,19 +242,27 @@ function createMarkdownEditor(target, id) {
             e.target.selectionEnd = text.length - end.length + 1;
         }
     })
-    return M.Tabs.init(ul)
+    TABS_INSTANCES.push(M.Tabs.init(ul, {onShow: function(e) {
+        handleMarkdown()}))
+    
 }
 
-function mutateCards() {
-    console.log('mutating cards')
-    let cards = Array.from(document.getElementsByClassName('card'))
-    cards.forEach((card, i) => {
+function newMDCard(e) {
+    e.stopPropagation()
+    console.log('making mdCard')
+    let target = document.getElementById(addCard())
+    console.log('target', target)
+    let cards = Array.from(target.querySelectorAll('.card'))
+    console.log('cards', cards)
+    cards.forEach(function(card, i) {
         console.log('working on this card:', card)
         while(card.firstElementChild) {
             card.removeChild(card.firstElementChild)
         }
-        createMarkdownEditor(card, i)
+        let id = 'row-' + NUMBER_OF_CARDS + '-' + 'card' + '-' + i
+        createMarkdownEditor(card, id)
     })
+    TABS_INSTANCES.forEach(instance => {instance.updateTabIndicator()})
 }
 
 document.addEventListener('DOMContentLoaded', function(e) {
@@ -259,17 +271,19 @@ document.addEventListener('DOMContentLoaded', function(e) {
     document.getElementById('add-card-to-collection-btn')
     .addEventListener('click', addCardHandler)
 
-    // initialize 'make a markdown' button
-    document.getElementById('markdown-btn')
-    .addEventListener('click', mutateCards)
     // initialize floating action button
     let fab = document.getElementById('settings-fab')
     M.FloatingActionButton.init(fab)
     fab.addEventListener('click', addCard)
+
     // initialize tooltips
     fabTooltips = fab.querySelectorAll('.tooltipped')
     M.Tooltip.init(fabTooltips, {position: 'left', enterDelay: 100})
 
     // initialize dictionary button
     document.getElementById('wordsAPI-btn').addEventListener('click', defineWordsClick)
+
+    // initialize 'make a markdown' button
+    document.getElementById('markdown-btn')
+    .addEventListener('click', newMDCard)
 })
