@@ -9,15 +9,20 @@ addCard(): makes a new card template
 function addCard() {
     // makes a new card and returns the id of its container
     console.log('adding card')
-    document.getElementById('house-of-cards').innerHTML += ('<div id="row-' + ++NUM +'" class="row"><div class="card-row col s12 m6"><div class="card-front card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align"> Back of card</span></div></div></div>')    
+    let row = document.createElement('div')
+    row.classList.add('row')
+    row.id = 'row-' + ++NUM
+    row.innerHTML += ('<div class="card-row col s12 m6"><div class="card-front card card-large valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card card-large valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align"> Back of card</span></div></div>')    
+    document.getElementById('house-of-cards').appendChild(row)
     return 'row-' + NUM
 }
 
 function addMinimalCard() {
+    // makes a new card with no content and returns the id of its container
     let row = document.createElement('div');
     row.id = 'row-' + ++NUM
     row.classList.add('row');
-    row.innerHTML = `<div class="col s12 m6"><div class="card card-large valign-wrapper">Front</div></div><div class="col s12 m6"><div class="card card-large valign-wrapper">Back</div></div>`
+    row.innerHTML = `<div class="col s12 m6"><div class="card card-large valign-wrapper"></div></div><div class="col s12 m6"><div class="card card-large valign-wrapper"></div></div>`
     document.getElementById('house-of-cards').append(row)
     return row.id
 }
@@ -131,6 +136,10 @@ function defineWordsClick(e) {
     getDefinitions(word)
 }
 
+function makeDefinitionCard() {
+    let container = document.getElementById(addCard())
+}
+
 /*
 
 This section will include:
@@ -150,12 +159,7 @@ toast any errors
 */
 function handleMarkdown(e) {
     let source = document.getElementById(e.currentTarget.dataset.source)
-    console.log('detecting markdown event')
-    console.log('etarget', e.target, 'currentTarget', e.currentTarget)
-    console.log('target data', e.currentTarget.dataset.source)
-    console.log('target', document.getElementById(e.target.dataset.source))
     let md = source.firstElementChild.value
-    console.log('fetching rendered markdown')
     console.log(JSON.stringify({md}))
     fetch('/parsemd', {
         method: 'POST',
@@ -163,46 +167,36 @@ function handleMarkdown(e) {
         headers: {'content-type':'application/json'},
         body: JSON.stringify({md})
     }).then(reply => {
-        console.log('reply', reply)
-        console.log('reply.body', reply.body)
         return reply.text()
     }).then(data => {
-        console.log('data', data)
         data = data.replace('<pre><code', '<?prettify?><pre><code')
         source.nextElementSibling.innerHTML = data
-
         PR.prettyPrint();
     }).catch(err => M.toast({html:err}))
 }
 
 function createMarkdownEditor(target, id) {
+    // make containers
     let row = document.createElement('div');
         row.classList.add('row');
     let col = document.createElement('div');
         col.classList.add('col', 's12');
     row.appendChild(col);
-    console.log('making row', row)
-    console.log('making col', col)
-
+    // make tab list
     let ul = document.createElement('ul');
         ul.id = id + '-ul'
-    console.log('setting ul id', ul.id)
         ul.classList.add('tabs');
     col.appendChild(ul)
-    console.log('making ul', console.log(ul))
-    
     let tabA = document.createElement('li');
         tabA.classList.add('tab', 'col', 's6');
     let linkA = document.createElement('a');
         linkA.textContent = 'markdown'
         linkA.href = '#' + id + '-md'
-    console.log('setting linkA href', '#' + id + '-md')
     let iconA = document.createElement('i')
         iconA.classList.add('material-icons')
         iconA.textContent = 'edit'
     linkA.insertAdjacentElement('afterbegin', iconA)
     tabA.insertAdjacentElement('afterbegin', linkA)
-    console.log('making tabA', tabA)
     ul.appendChild(tabA)
 
     let tabB = document.createElement('li');
@@ -210,34 +204,29 @@ function createMarkdownEditor(target, id) {
     let linkB = document.createElement('a');
         linkB.textContent = 'preview'
         linkB.href = '#' + id + '-preview'
-    console.log('assigning linkB href', '#' + id + '-preview')
         linkB.dataset.source = id + '-md';
         linkB.addEventListener('click', handleMarkdown)
-    console.log('setting dataset source', linkB.dataset.source)
     let iconB = document.createElement('i')
         iconB.classList.add('material-icons')
         iconB.textContent = 'visibility'
     linkB.insertAdjacentElement('afterbegin', iconB)
     tabB.insertAdjacentElement('afterbegin', linkB)
-    console.log('making tabB:', tabB)
     ul.appendChild(tabB)
-
+    // make tab content for markdown entry tab
     let markdown = document.createElement('div');
         markdown.id = id + '-md'
-    console.log('setting markdown div id:', id + '-md')
         markdown.classList.add('col', 's12', 'md-wrap')
     let mdText = document.createElement('textarea')
         mdText.classList.add('mdText')
         mdText.id = id + 'text'
-    console.log('making textarea', mdText)
+        mdText.value = id[id.length - 1] == 0 ? '#### Front of card' : '#### Back of card'
     markdown.appendChild(mdText)
     target.appendChild(markdown)
-
+    // make tab content for preview tab
     let preview = document.createElement('div');
         preview.id = id + '-preview'
         preview.classList.add('col', 's12', 'preview-wrap')
     target.appendChild(preview)
-    console.log(target)
     target.insertAdjacentElement('beforebegin', row)
 
     // resizes text area for given input
@@ -260,6 +249,13 @@ function createMarkdownEditor(target, id) {
             e.target.selectionStart = start.length + 1;
             e.target.selectionEnd = text.length - end.length + 1;
         }
+    })
+    // makes clicks in textarea container give focus to textarea
+    target.addEventListener('click', function focusTextarea(e) {
+        if (mdText.parentElement.style.display !== 'none') {
+            mdText.focus()
+        }
+        // else do nothing
     })
     TABS_ELS.push(ul)
     TABS_INSTANCES.push(M.Tabs.init(ul))
@@ -298,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     M.Tooltip.init(fabTooltips, {position: 'left', enterDelay: 100})
 
     // initialize dictionary button
-    document.getElementById('wordsAPI-btn').addEventListener('click', defineWordsClick)
+    document.getElementById('definition-btn').addEventListener('click', defineWordsClick)
 
     // initialize 'make a markdown' button
     document.getElementById('markdown-btn')
