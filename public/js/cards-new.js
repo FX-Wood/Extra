@@ -1,19 +1,25 @@
-NUMBER_OF_CARDS = 1;
+NUM = 0;
 TABS_INSTANCES = [];
+TABS_ELS = [];
 /*
 This section will include:
 addCard(): makes a new card template
-
-
-
-
 */
 
 function addCard() {
     // makes a new card and returns the id of its container
     console.log('adding card')
-    document.getElementById('house-of-cards').innerHTML += ('<div id="row-' + ++NUMBER_OF_CARDS +'" class="row"><div class="card-row col s12 m6"><div class="card-front card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align"> Back of card</span></div></div></div>')
-    return 'row-' + NUMBER_OF_CARDS
+    document.getElementById('house-of-cards').innerHTML += ('<div id="row-' + ++NUM +'" class="row"><div class="card-row col s12 m6"><div class="card-front card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card new-card valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align"> Back of card</span></div></div></div>')    
+    return 'row-' + NUM
+}
+
+function addMinimalCard() {
+    let row = document.createElement('div');
+    row.id = 'row-' + ++NUM
+    row.classList.add('row');
+    row.innerHTML = `<div class="col s12 m6"><div class="card card-large valign-wrapper">Front</div></div><div class="col s12 m6"><div class="card card-large valign-wrapper">Back</div></div>`
+    document.getElementById('house-of-cards').append(row)
+    return row.id
 }
 
 function addCardHandler(e) {
@@ -146,7 +152,7 @@ function handleMarkdown(e) {
     let source = document.getElementById(e.currentTarget.dataset.source)
     console.log('detecting markdown event')
     console.log('etarget', e.target, 'currentTarget', e.currentTarget)
-    console.log('target data', e.target.dataset.source)
+    console.log('target data', e.currentTarget.dataset.source)
     console.log('target', document.getElementById(e.target.dataset.source))
     let md = source.firstElementChild.value
     console.log('fetching rendered markdown')
@@ -175,22 +181,28 @@ function createMarkdownEditor(target, id) {
     let col = document.createElement('div');
         col.classList.add('col', 's12');
     row.appendChild(col);
+    console.log('making row', row)
+    console.log('making col', col)
 
     let ul = document.createElement('ul');
         ul.id = id + '-ul'
+    console.log('setting ul id', ul.id)
         ul.classList.add('tabs');
     col.appendChild(ul)
+    console.log('making ul', console.log(ul))
     
     let tabA = document.createElement('li');
         tabA.classList.add('tab', 'col', 's6');
     let linkA = document.createElement('a');
         linkA.textContent = 'markdown'
         linkA.href = '#' + id + '-md'
+    console.log('setting linkA href', '#' + id + '-md')
     let iconA = document.createElement('i')
         iconA.classList.add('material-icons')
         iconA.textContent = 'edit'
     linkA.insertAdjacentElement('afterbegin', iconA)
     tabA.insertAdjacentElement('afterbegin', linkA)
+    console.log('making tabA', tabA)
     ul.appendChild(tabA)
 
     let tabB = document.createElement('li');
@@ -198,19 +210,26 @@ function createMarkdownEditor(target, id) {
     let linkB = document.createElement('a');
         linkB.textContent = 'preview'
         linkB.href = '#' + id + '-preview'
+    console.log('assigning linkB href', '#' + id + '-preview')
         linkB.dataset.source = id + '-md';
+        linkB.addEventListener('click', handleMarkdown)
+    console.log('setting dataset source', linkB.dataset.source)
     let iconB = document.createElement('i')
         iconB.classList.add('material-icons')
         iconB.textContent = 'visibility'
     linkB.insertAdjacentElement('afterbegin', iconB)
     tabB.insertAdjacentElement('afterbegin', linkB)
+    console.log('making tabB:', tabB)
     ul.appendChild(tabB)
 
     let markdown = document.createElement('div');
         markdown.id = id + '-md'
+    console.log('setting markdown div id:', id + '-md')
         markdown.classList.add('col', 's12', 'md-wrap')
     let mdText = document.createElement('textarea')
         mdText.classList.add('mdText')
+        mdText.id = id + 'text'
+    console.log('making textarea', mdText)
     markdown.appendChild(mdText)
     target.appendChild(markdown)
 
@@ -242,24 +261,22 @@ function createMarkdownEditor(target, id) {
             e.target.selectionEnd = text.length - end.length + 1;
         }
     })
-    TABS_INSTANCES.push(M.Tabs.init(ul, {onShow: function(e) {
-        handleMarkdown()}))
+    TABS_ELS.push(ul)
+    TABS_INSTANCES.push(M.Tabs.init(ul))
     
 }
 
 function newMDCard(e) {
     e.stopPropagation()
     console.log('making mdCard')
-    let target = document.getElementById(addCard())
+    let target = document.getElementById(addMinimalCard())
     console.log('target', target)
     let cards = Array.from(target.querySelectorAll('.card'))
     console.log('cards', cards)
     cards.forEach(function(card, i) {
         console.log('working on this card:', card)
-        while(card.firstElementChild) {
-            card.removeChild(card.firstElementChild)
-        }
-        let id = 'row-' + NUMBER_OF_CARDS + '-' + 'card' + '-' + i
+        card.innerHTML = '';
+        let id = 'row-' + NUM + '-' + 'card' + '-' + i
         createMarkdownEditor(card, id)
     })
     TABS_INSTANCES.forEach(instance => {instance.updateTabIndicator()})
