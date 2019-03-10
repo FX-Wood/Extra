@@ -12,8 +12,8 @@ function addCard() {
     let row = document.createElement('div')
     row.classList.add('row')
     row.id = 'row-' + ++NUM
-    row.innerHTML += ('<div class="card-row col s12 m6"><div class="card-front card card-large valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="card-front card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card card-large valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align"> Back of card</span></div></div>')    
-    document.getElementById('house-of-cards').appendChild(row)
+    row.innerHTML += '<div class="col s12 m6"><div class="card-front card card-large valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="front-text card-title"> Front of card </span></div></div></div><div class="col s12 m6"><div class="card card-large valign-wrapper"><div class="card-content valign-wrapper"><span contenteditable class="center-align back-text"> Back of card</span></div></div>'
+    document.getElementById('house-of-cards').insertAdjacentElement('afterbegin', row)
     return 'row-' + NUM
 }
 
@@ -23,7 +23,7 @@ function addMinimalCard() {
     row.id = 'row-' + ++NUM
     row.classList.add('row');
     row.innerHTML = `<div class="col s12 m6"><div class="card card-large valign-wrapper"></div></div><div class="col s12 m6"><div class="card card-large valign-wrapper"></div></div>`
-    document.getElementById('house-of-cards').append(row)
+    document.getElementById('house-of-cards').insertAdjacentElement('afterbegin', row)
     return row.id
 }
 
@@ -59,41 +59,13 @@ The following section includes:
     defineWordsClick(): the click handler that kicks off the functions in this section
 */
 
-function getDefinitions(word) {
-    // takes a word, returns a promise
-    cleanWord = word.replace(' ','')
-    return fetch('/define/' + word, {
-        credentials: 'include'
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw Error('"' + word + '" (' + res.status + ': ' + res.statusText + ')')
-        }
-        res.json()
-    })
-    .then(definitions => {
-        console.log(definitions)
-        let row = document.getElementById('card-row')
-        let col = row.appendChild(document.createElement('div'))
-            col.classList.add('col', 's12')
-        let select = makeDefinitionSelect(filterDefinitions(definitions))
-            select.id = 'select-definition'
-        col.appendChild(select)
-        let backText = document.getElementById('back');
-        backText.innerText = select.firstElementChild.value
-        
-        M.FormSelect.init(select.firstElementChild)
-        select.firstElementChild.addEventListener('change', e => {
-            backText.textContent = e.target.value
-        })
-    })
-    .catch(err => {
-        M.toast({html: err.message})
-        console.log(err)
-    })
-}
 
 function filterDefinitions(twinwordsResponseObj) {
+    // makes a definitions object containing
+    // {
+    // key: part of speech
+    // value: [array of definitions]
+    // }
     return twinwordsResponseObj.definitions.reduce((acc, next) => {
         if (next.partOfSpeech in acc && acc[next.partOfSpeech].length < 4) {
                 (acc[next.partOfSpeech]).push(next.definition)
@@ -104,14 +76,8 @@ function filterDefinitions(twinwordsResponseObj) {
     }, {})
 }
 
-function makeDefinitionSelect(definitions) {
-    // make container
-    let container = document.createElement('div')
-        container.classList.add('input-field')
-    // make select
-    let select = document.createElement('select')
-    container.appendChild(select)
-    // loop over parts of speech
+function makeOptions(definitions) {
+    let node = document.createDocumentFragment()
     for (partOfSpeech in definitions) {
         // make an option group
         let optGroup = document.createElement('optgroup');
@@ -123,21 +89,93 @@ function makeDefinitionSelect(definitions) {
             option.textContent = definition
             optGroup.appendChild(option)
         })
-            select.appendChild(optGroup)
+            node.appendChild(optGroup)
     }
-    container.querySelector('option').setAttribute('selected', '')
-    console.log(container.querySelector('option'))
-    console.log('select.value', select.value)
-    return container
+    return node
 }
 
-function defineWordsClick(e) {
-    let word = document.getElementById('front').innerText
+function getDefinitions(word) {
+    // takes a word, returns a promise
+    return fetch('/define/' + word, {
+        credentials: 'include'
+    })
+    .then(res => {
+        // catch any errors in fetch
+        if (!res.ok) {throw Error('"' + word + '" (' + res.status + ': ' + res.statusText + ')')}
+        return res.json()
+    })
+}
+
+
+function refreshDefinitionsClick(e) {
+    let word = document.getElementById(e.currentTarget.dataset.sourceID).querySelector('.card-title').innerText
+    // replace trailing whitespace
+    word = word.replace(/\s+$/gm, '')
+    // replace leading whitespace
+    word = word.replace(/^\s+/gm, '')
+    if (!word.match(/^[a-zA-z]+$/)) {
+        M.toast({html:'Try a different word'})
+        throw new Error('Word is not alphanumeric')
+    }
+    console.log(e.currentTarget.dataset.selectID)
+    let select = document.getElementById(e.currentTarget.dataset.selectID)
     getDefinitions(word)
+    .then(defs => {
+        select.innerHTML = ''
+        let options = makeOptions(filterDefinitions(defs))
+        select.appendChild(options)
+        M.FormSelect.init(select)
+    })
+    .catch(err => {
+        M.toast({html: err.message})
+        console.log(err)
+    })
 }
 
-function makeDefinitionCard() {
-    let container = document.getElementById(addCard())
+function newVocabularyCard(e) {
+    e.stopPropagation()
+    // make new blank cards
+    let parent = document.getElementById(addCard())
+    let backText = parent.querySelector('.back-text')
+    // create a new row
+    let row = document.createElement('div')
+        row.classList.add('row')
+    parent.appendChild(row);
+    // make a select
+    let selectCol = document.createElement('div');
+        selectCol.classList.add('col', 's11')
+    row.appendChild(selectCol)
+    let select = document.createElement('select')
+        select.id = parent.id + '-select'
+        select.addEventListener('change', function updateCard(e) {
+            console.log('select value', e.target.value)
+            console.log(backText)
+            backText.textContent = e.target.value
+        })
+    selectCol.appendChild(select)
+    // make a button to refresh the select
+    let btnCol = document.createElement('div')
+        btnCol.classList.add('col', 's1')
+    row.appendChild(btnCol)
+    let refreshBtn = document.createElement('a')
+        refreshBtn.dataset.sourceID = parent.id
+        refreshBtn.dataset.selectID = parent.id  + '-select'
+        refreshBtn.classList.add('btn-flat', 'waves-effect', 'waves-orange')
+        // styling on mouseover
+        refreshBtn.addEventListener('mouseover', function refreshMouseover(e) {
+            e.currentTarget.classList.add('btn', 'orange')
+        })
+        refreshBtn.addEventListener('mouseout', function refreshMouseout(e) {
+            e.currentTarget.classList.remove('btn', 'orange')
+        })
+        refreshBtn.addEventListener('click', refreshDefinitionsClick)
+    btnCol.appendChild(refreshBtn)
+    let refreshIcon = document.createElement('i')
+        refreshIcon.classList.add('material-icons')
+        refreshIcon.textContent = 'refresh'
+    refreshBtn.appendChild(refreshIcon)
+
+    M.FormSelect.init(select)
 }
 
 /*
@@ -294,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     M.Tooltip.init(fabTooltips, {position: 'left', enterDelay: 100})
 
     // initialize dictionary button
-    document.getElementById('definition-btn').addEventListener('click', defineWordsClick)
+    document.getElementById('vocabulary-btn').addEventListener('click', newVocabularyCard)
 
     // initialize 'make a markdown' button
     document.getElementById('markdown-btn')

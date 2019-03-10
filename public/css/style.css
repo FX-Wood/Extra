@@ -37,3 +37,28 @@ textarea {
     outline: none;
     resize: none;
 }
+
+/* new card page */
+/* from https://github.com/Dogfalo/materialize/issues/4343 */
+.select-wrapper input.select-dropdown {
+    border: 2px solid black
+}
+.select-wrapper input.select-dropdown,
+.select-wrapper input.select-dropdown:focus,
+.select-wrapper input.select-dropdown:active {
+    padding-right: 10px;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+}
+
+.select-wrapper input.select-dropdown:focus {
+    border-bottom: 1px solid #ff9800;
+}
+
+.select-wrapper li.optgroup > span {
+    color: #ff9800;
+}
+
+.select-wrapper li.optgroup-option > span {
+    color: rgba(0,0,0,.87);
+}
