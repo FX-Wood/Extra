@@ -10,14 +10,29 @@ router.route('/')
         res.send('you are at the collections page, this will show an index of collections')
     })
     .post((req,res) => {
-        db.card.create({
-            front: req.body.front,
-            back: req.body.back,
-            collectionId: req.body.collectionId
-        }).then(card => {
-            res.send(req.body)
+        console.log('POST /cards')
+        db.collection.findAll({
+            where: {userId: req.user.id}
+        }).then(collections => {
+            let ownership = false
+            for (collection of collections.map(collection => collection.get({plain: true}))) {
+                if (collection.id == req.body.collectionId) {
+                    ownership = true;
+                }
+            }
+            if (ownership) {
+                let cards = req.body.cards.map(card => {
+                        return Object.assign(card, {collectionId: req.body.collectionId})
+                    })
+                db.card.bulkCreate(cards)
+                .spread((affectedCount, badPostgres) => {
+                    res.send('done')
+                })
+            } else {
+                throw Error('Unauthorized attempt to modify collection')
+            }
         }).catch(err => {
-            res.status(500).send('There was a server-side error')
+            res.status(500).send(err)
         })
     })
 

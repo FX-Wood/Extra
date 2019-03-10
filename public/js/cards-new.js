@@ -48,6 +48,32 @@ function addCardHandler(e) {
     })
 }
 
+function saveCards(e) {
+    let cards = []
+    let collectionId = document.getElementById('collection-picker').value
+    let fronts = Array.from(document.querySelectorAll('.front-text')).map(el => el.innerText)
+    let backs = Array.from(document.querySelectorAll('.back-text')).map(el => el.innerText)
+    for (let i = 0; i < fronts.length; i++) {
+        cards.push({front: fronts[i], back: backs[i]})
+    }
+    fronts = Array.from(document.querySelectorAll('.rendered-md-front')).map(el => el.innerHTML)
+    backs = Array.from(document.querySelectorAll('.rendered-md-back')).map(el => el.innerHTML)
+    for (let i = 0; i < fronts.length; i++) {
+        cards.push({front: fronts[i], back: backs[i]})
+    }
+    console.log('sending', JSON.stringify({cards, collectionId}))
+    fetch('/cards', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({cards, collectionId})
+    }).then(reply => {
+        window.location = '/collections/'+ collectionId
+    })
+}
+
 /*
 The following section includes:
     getDefinitions(): gets twinword api from extra server
@@ -264,6 +290,7 @@ function createMarkdownEditor(target, id) {
     let preview = document.createElement('div');
         preview.id = id + '-preview'
         preview.classList.add('col', 's12', 'preview-wrap')
+        preview.className += id[id.length - 1] == 0 ? ' rendered-md-front' : ' rendered-md-back'
     target.appendChild(preview)
     target.insertAdjacentElement('beforebegin', row)
 
@@ -297,7 +324,7 @@ function createMarkdownEditor(target, id) {
     })
     TABS_ELS.push(ul)
     TABS_INSTANCES.push(M.Tabs.init(ul))
-    
+    handleMarkdown({currentTarget: linkB})
 }
 
 function newMDCard(e) {
