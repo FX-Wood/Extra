@@ -8,29 +8,33 @@ router.get('/signup', function(req, res) {
 });
 
 router.post('/signup', function(req,res) {
-  db.user.findOrCreate({
-    where: {email: req.body.email},
-    defaults: {
-      name: req.body.name,
-      password: req.body.password
-    }
-  }).spread(function(user, created) {
-    console.log('In signup, user created: ', created)
-    if (created) {
-      passport.authenticate('local', {
-        successRedirect: '/',
-        successFlash: 'Account created and logged in'
-      })(req, res)
-    } else {
-      console.log('Email already exists');
-      req.flash('error', 'email already exists');
-      res.redirect("/auth/signup");
-    }
-  }).catch(function(error) {
-    console.log(error)
-    req.flash('error', error.errors[0].message)
-    res.redirect('/auth/signup')
-  })
+  if (!req.signupCode === env.process.SIGNUP_KEY) {
+    throw Error('Incorrect sign-up key')
+  } else {
+    db.user.findOrCreate({
+      where: {email: req.body.email},
+      defaults: {
+        name: req.body.name,
+        password: req.body.password
+      }
+    }).spread(function(user, created) {
+      console.log('In signup, user created: ', created)
+      if (created) {
+        passport.authenticate('local', {
+          successRedirect: '/',
+          successFlash: 'Account created and logged in'
+        })(req, res)
+      } else {
+        console.log('Email already exists');
+        req.flash('error', 'email already exists');
+        res.redirect("/auth/signup");
+      }
+    }).catch(function(error) {
+      console.log(error)
+      req.flash('error', error.errors[0].message)
+      res.redirect('/auth/signup')
+    })
+  }
 })
 
 router.get('/login', function(req, res) {
