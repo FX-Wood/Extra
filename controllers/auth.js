@@ -9,6 +9,7 @@ router.get('/signup', function(req, res) {
 
 router.post('/signup', function(req,res) {
   if (!req.signupCode === env.process.SIGNUP_KEY) {
+    res.status(301).json(Error('Incorrect sign-up key'))
     throw Error('Incorrect sign-up key')
   } else {
     db.user.findOrCreate({
