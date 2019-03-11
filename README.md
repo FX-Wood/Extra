@@ -14,8 +14,7 @@ Goals for this project include
   + Employ full CRUD routing
   + Deploy with Heroku
   + Explore tools:
-    - SCSS
-    - Material Design
+    - Materialize
 
 ## User stories
 A user wants to make flash cards to practice english-language vocabulary. They sign in, create a collection, and add several flash cards to the collection.
@@ -41,4 +40,15 @@ Play Collection | ![quizlet-play](https://raw.githubusercontent.com/FX-Wood/Extr
 Score | ![quizlet-score](https://raw.githubusercontent.com/FX-Wood/Extra/master/public/img/readme_img/quizlet-score.png) | ![cram-score](https://raw.githubusercontent.com/FX-Wood/Extra/master/public/img/readme_img/cram-score.png) | ![duolingo-score](https://raw.githubusercontent.com/FX-Wood/Extra/master/public/img/readme_img/duolingo-score.png)
 
 
-## Journey
+## Future funtionality
+Features remaining:
+removing cards
+- from collections
+- from addition page
+Picture fronts
+Dark mode
+
+## Open Issues
+For words with one definition, cannot select first definition and see a change
+Newly created collections cannot save their edits
+Markdown cards run into issues with varchar 255 being too short
