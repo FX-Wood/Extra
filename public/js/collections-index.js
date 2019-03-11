@@ -17,6 +17,7 @@ function addCollection(e) {
             cardTitle.textContent = collection.name
         
         let cardDesc = document.createElement('p');
+            cardDesc.classList.add('collection-description')
             cardDesc.textContent = collection.description
         
         card.appendChild(cardContent)
