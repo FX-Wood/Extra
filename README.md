@@ -47,6 +47,8 @@ removing cards
 - from addition page
 Picture fronts
 Dark mode
+User names with an internal UUID
+
 
 ## Open Issues
 For words with one definition, cannot select first definition and see a change
