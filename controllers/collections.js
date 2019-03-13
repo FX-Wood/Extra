@@ -71,7 +71,7 @@ router.route('/:id([0-9]+)')
     // DELETE one collection
     .delete((req,res) => {
         db.collection.destroy({
-            where: {id: req.params.id}
+            where: {id: req.params.id, userId: req.user.id}
         }).then(result => {
             console.log('User deleted collection #' + req.params.id)
             console.log('this was returned from the db:', result)
