@@ -31,7 +31,7 @@ describe('GET /profile', function() {
       if (error) {
         done(error);
       } else {
-        let cookie = res.header['set-cookie'][0].replace(' ', '')
+        let cookie = res.header['set-cookie'][0]
         agent.set('Cookie', [cookie]);
 
         agent.get('/profile')
