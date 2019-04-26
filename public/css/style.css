@@ -67,6 +67,10 @@ textarea {
     width: 8em;
 }
 
+.btn.primary10 {
+    width: 10em
+}
+
 /* flex utility classes */
 .flex {
     display: flex;

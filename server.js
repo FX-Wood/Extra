@@ -49,11 +49,19 @@ app.use(function(req,res,next) {
 })
 
 app.get('/', function(req, res) {
-  res.render('index', { user: req.user });
+    res.render('index', { user: req.user });
 });
 
 app.get('/profile', isLoggedIn, function(req, res) {
-  res.render('profile');
+  console.log('user', req.user)
+  // const cards = await db.collection.count({where: {userId: req.user.id}, include: [db.card]})
+  // const collections = await db.collection.count({where: {userId: req.user.id}})
+  Promise.all([
+    db.collection.count({where: {userId: req.user.id}, include: [db.card]}),
+    db.collection.count({where: {userId: req.user.id}})
+  ]).then(([cards, collections]) => {
+    res.render('profile', { user: req.user, collections, cards });
+  })
 });
 
 app.use('/auth', require('./controllers/auth'));

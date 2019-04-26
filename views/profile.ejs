@@ -1,3 +1,9 @@
-<h2>Profile Page</h2>
 
-<a href="/">Home</a>
+
+<div class="container">
+    <h2>Profile</h2>
+    <h4><%= user.name %></h4>
+    <p>Number of cards: <%= cards %></p>
+    <p>Number of collections: <%= collections %></p>
+    <p>Date joined: <%= user.createdAt %></p>
+</div>
