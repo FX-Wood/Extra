@@ -59,3 +59,30 @@ textarea {
 .select-wrapper li.optgroup-option > span {
     color: rgba(0,0,0,.87);
 }
+
+.button-wrap {
+    padding: 1em;
+}
+.btn.primary {
+    width: 8em;
+}
+
+/* flex utility classes */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column; 
+}
+
+.flex.align-items-center,
+.flex-col.align-items-center {
+    align-items: center;
+}
+
+.flex-col.justify-content-center
+.flex.justify-content-center {
+    justify-content: center;
+}

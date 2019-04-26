@@ -1,1 +1,23 @@
-<h2>LANDING PAGE</h2>
+<div class="container">
+    <div class="row valign-wrapper">
+        <div class="col s12 m6">
+            <h1>Extra</h1>
+            <h5>Flash cards as a service!<h5> 
+            <h6>Practice vocabulary, jargon, anatomy, formulae, and more.</h6>
+            <div class="flex align-items-center">
+                <i class="material-icons">offline_bolt</i>
+                <h6>Automatically define vocabulary with an integrated dictionary API</h6>
+            </div>
+            <div class="flex align-items-center">
+                <i class="material-icons">code</i>
+                <h6>Use markdown on your flash cards to add code snippets with language-specific syntax highlighting!</h6>
+            </div>
+        </div>
+        <% if (!user) { %>
+            <div class="col s12 m6 center">
+                <div class="button-wrap"><a href="auth/login"class="btn primary">Login</a></div>
+                <div class="button-wrap"><a href="auth/signup" class="btn primary">Sign up</a></div>
+            </div>
+        <% } %>
+    </div>
+</div>

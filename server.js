@@ -49,7 +49,7 @@ app.use(function(req,res,next) {
 })
 
 app.get('/', function(req, res) {
-  res.render('index');
+  res.render('index', { user: req.user });
 });
 
 app.get('/profile', isLoggedIn, function(req, res) {
