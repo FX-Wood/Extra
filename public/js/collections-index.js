@@ -8,6 +8,7 @@ function addCollection(e) {
         let parent = document.getElementById('collections')
         let card = document.createElement('div')
             card.classList.add('card', 'hoverable', 'waves-effect')
+            card.id = 'id_' + collection.id
 
         let cardContent = document.createElement('div')
             cardContent.classList.add('card-content')
@@ -107,7 +108,6 @@ function doneClick(e) {
     let id = card.id.slice(3)
     let title = card.querySelector('.card-title').innerText
     let description = card.querySelector('.collection-description').innerText
-    console.log(JSON.stringify({title,description}))
     
     fetch('/collections/' + id, {
         method: 'PUT',
@@ -117,7 +117,6 @@ function doneClick(e) {
         },
         body: JSON.stringify({title, description})
     }).then(reply => {
-        console.log('got a reply, parsing')
         return reply.json()
     }).then(collection => {
         console.log('this is what you got back:', collection)
