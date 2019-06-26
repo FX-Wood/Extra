@@ -4,7 +4,7 @@ const db = require('../db/models');
 const passport = require('../config/passportConfig');
 
 router.get('/signup', function(req, res) {
-  res.render('auth/signup');
+  res.render('auth/signup', { user: req.user });
 });
 
 router.post('/signup', function(req,res) {
@@ -39,7 +39,7 @@ router.post('/signup', function(req,res) {
 })
 
 router.get('/login', function(req, res) {
-  res.render('auth/login');
+  res.render('auth/login', { user: req.user });
 });
 
 router.post('/login', passport.authenticate('local', {
