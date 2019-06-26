@@ -46,7 +46,7 @@ router.route('/:id([0-9]+)')
         db.collection.findByPk(req.params.id,{
             include: [db.card]
         }).then(collection => {
-            res.render('collections/collections-show', {collection})
+            res.render('collections/collections-show', {collection, user: req.user})
         }).catch(err => {
             console.log(err)
             res.status(500).send('There was a server-side error!')
