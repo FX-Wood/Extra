@@ -1,34 +1,45 @@
 function addCollection(e) {
+    const form = document.getElementById('new-collection-modal__form')
+    if (!form[0].value) {
+        return;
+    }
+    if (!form[1].value) {
+        return;
+    }
+    const data = new URLSearchParams(new FormData(form))
+    e.preventDefault() // prevent submission
     fetch('/collections', {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
+        body: data
     }).then(response => {
-        return response.json()
-    }).then(collection  => {
-        let parent = document.getElementById('collections')
+        if (response.ok) return response.json()
+        else throw new Error('there was a problem creating your collection')
+    }).then(newCard  => {
         let card = document.createElement('div')
             card.classList.add('card', 'hoverable', 'waves-effect')
-            card.id = 'id_' + collection.id
+            card.id = 'id_' + newCard.id
 
         let cardContent = document.createElement('div')
             cardContent.classList.add('card-content')
 
         let cardTitle = document.createElement('span')
             cardTitle.classList.add('card-title');
-            cardTitle.textContent = collection.name
+            cardTitle.textContent = newCard.name
         
         let cardDesc = document.createElement('p');
             cardDesc.classList.add('collection-description')
-            cardDesc.textContent = collection.description
+            cardDesc.textContent = newCard.description
         
-        card.appendChild(cardContent)
-            .appendChild(cardTitle).parentElement
-            .appendChild(cardDesc)
-        parent.insertAdjacentElement('afterbegin', card)
+        cardContent.append(cardTitle, cardDesc)
+        card.append(cardContent)
+        document.getElementById('collections').insertAdjacentElement('afterbegin', card)
         card.addEventListener('mousedown', mouseDownEditCheck)
+        form.reset()
+        M.Modal.getInstance(document.getElementById('new-collection-modal')).close()
     }).catch(error => {
-        M.Toast(error.name + ': ' + error.message)
-        console.log(error)
+        console.error(error)
+        new M.Toast({html: error})
     })
 }
 
@@ -127,13 +138,18 @@ function doneClick(e) {
 }
 
 document.addEventListener('DOMContentLoaded', (e) => {
+    console.log('domcontentloaded')
     // set listener for 'new collection button'
-    document.getElementById('new-collection-btn')
+    M.Modal.init(document.getElementById('new-collection-modal'));
+    document.getElementById('new-collection-modal__done-btn')
         .addEventListener('click', addCollection);
+    document.getElementById('new-collection-modal__form')
+        .addEventListener('submit', addCollection);
     // set listeners for collection editing 'mousehold'
-    Array.from(document.getElementById('collections').children)
-        .forEach(child => {
-            child.addEventListener('mousedown', mouseDownEditCheck)
-        })
+    const collections = document.getElementById('collections').children
+    for (let i = 0; i < collections.length; i++) {
+        collections[i].addEventListener('mousedown', mouseDownEditCheck)
+    }
+
 })
 

@@ -26,10 +26,12 @@ router.route('/')
     })
     // POST new collection
     .post((req,res) => {
+        const { name, description } = req.body
+        const userId = req.user.id
         db.collection.create({
-            name: "New Collection",
-            description: "New, undescribed collection.",
-            userId: req.user.id
+            name,
+            description,
+            userId
         })
         .then(collection => {
             res.send(collection)

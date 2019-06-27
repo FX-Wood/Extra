@@ -1,22 +1,20 @@
-<h2>COLLECTIONS INDEX</h2>
+<style>
+    .profile-picture {
+        margin-right: 15px
+    }
+</style>
 
 <div class="container">
-    <h3>User</h3>
-    <img class="left" src="<%- profileImage %>" alt="user profile image">
+    <h4>My Collections</h4>
+    <img class="left profile-picture" src="<%- profileImage %>" alt="user profile image">
     <p>User name: <%= currentUser.name %></p>
     <p>Number of collections: [placeholder]</p>
     <p>Number of cards: [placeholder]</p>
-</div>
-
-<div class="container">
-    <h3>Collections</h3>
-        <a class="btn-large" id="new-collection-btn"> 
-            <i class="material-icons left">
-                add
-            </i>
-            Add a collection
-        </a>
-        <h5>Click and hold on a collection to edit it</h5>
+    <a class="btn-large waves-effect waves-light modal-trigger" href="#new-collection-modal" id="new-collection-btn"> 
+        <i class="material-icons left">add</i>
+        Add a collection
+    </a>
+    <h5>Click and hold on a collection to edit it</h5>
 </div>
 <div id="collections" class="container">
 <%  user.collections
@@ -35,4 +33,24 @@
             </div>
         </div>
     <% }) %>
+</div>
+<!-- Modal Structure -->
+<div id="new-collection-modal" class="modal">
+    <div class="modal-content">
+        <form id="new-collection-modal__form">
+            <h4>Make a new Collection</h4>
+            <div class="input-field" >
+                <input id="name" name="name" type="text" class="validate" required>
+                <label for="name" onclick=>Collection name</label>
+            </div>
+            <div class="input-field">
+                <input id="description" name="description" class="validate" type="text" required>
+                <label for="description">Collection description </label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a id="new-collection-modal__done-btn" class="waves-effect waves-green btn-flat">Create</a>
+    </div>
+    </div>
 <script src="/js/collections-index.js"></script>
