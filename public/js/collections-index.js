@@ -46,23 +46,17 @@ function addCollection(e) {
 function mouseDownEditCheck(e) {
     if (e.button === 0) { // ignore right clicks
         let target = e.currentTarget
-        console.log('mousedown')
-        console.log('currentTarget', target)
         let timer = setTimeout(() => {
-            console.log('timeout')
             editCollection(target)
             target.scrollIntoView()
-        }, 800)
+        }, 600)
         window.addEventListener('mouseup', (e) => {
-            console.log('mouseup')
             clearTimeout(timer)
         }, {once: true})
     }
 }
 
 function editCollection(target) {
-    console.log('editing');
-    console.log('target', target);
     // remove edit-triggering event listener
     target.removeEventListener('mousedown', mouseDownEditCheck)
     target.classList.remove('waves-effect');
@@ -73,7 +67,7 @@ function editCollection(target) {
 
     // create a container for the buttons
     let buttonBox = document.createElement('div');
-        buttonBox.classList.add('right', )
+        buttonBox.classList.add('right', 'edit-buttons')
     target.firstElementChild.insertAdjacentElement('afterbegin', buttonBox)
 
     // create a 'visit collection' button
@@ -86,11 +80,6 @@ function editCollection(target) {
         sIcon.classList.add('material-icons','left');
         show.appendChild(sIcon)
     buttonBox.appendChild(show)
-
-    // create a line break element for the buttons
-    let buttonLineBreak = document.createElement('br')
-        buttonLineBreak.classList.add('button-br')
-    buttonBox.appendChild(buttonLineBreak)
 
     // create a 'done' button
     let done = document.createElement('button');

@@ -4,6 +4,27 @@
 [contenteditable]:focus {
     outline: none;
 }
+#collections .card:not([contenteditable]) {
+    min-width: 300px;
+    margin: .6rem .45rem;
+}
+#collections .edit-buttons .btn {
+    width: 100%;
+    margin: 5px 0;
+    text-align: left;
+}
+
+#collections .edit-buttons {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+}
+
 
 .card-large {
     min-height: 25vh;
@@ -16,10 +37,6 @@
 
 .form-width {
     min-width: 50vw
-}
-
-.collections-index-select-btn {
-    margin: 2px 0;
 }
 
 .show-collection-card {
