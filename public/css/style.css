@@ -1,5 +1,7 @@
 /* collections-index */
-
+#new-collection-modal {
+    padding: 2rem;
+}
 [contenteditable],
 [contenteditable]:focus {
     outline: none;
