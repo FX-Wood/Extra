@@ -1,0 +1,92 @@
+<!-- style -->
+<style>
+    .hidden {
+        display: none;
+    }
+    .challenge-card {
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .toolbar {
+        display: flex;
+        justify-content: center;
+    }
+    .toolbar > button {
+        margin: 0 5px;
+    }
+</style>
+
+<!-- markup -->
+<div class="container">
+    <h1>Challenge!</h1>
+    <h3><%=collection.name%></h3>
+
+    <div class="row">
+        <div class="col s12 m6">
+            <div class="card challenge-card hide">
+                <h4>Click next to begin</h4>
+                <div class="hide">Click peek to see the back of the card</div>
+            </div>
+            <% collection.cards.forEach((card, i) => { %>
+                <div class="card challenge-card hide">
+                    <h4><%= card.front %></h4>
+                    <div class="hide"><%= card.back %></div>
+                </div>
+            <% }) %>
+            <div class="card challenge-card hide">
+                <h4>THE END</h4>
+                <div class="hide">good job!</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="toolbar col s12 m6">
+            <button id="back-btn" class="btn toolbar-button">Back</button>
+            <button id="peek-btn" class="btn toolbar-button">peek</button>
+            <button id="next-btn" class="btn toolbar-button">Next</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- script -->
+<script> 
+    var currentIndex = 0;
+    var cards;
+    function next() {
+        const curr = cards[currentIndex]
+        const next = cards[currentIndex + 1]
+        if (next) {
+            currentIndex += 1
+            curr.classList.toggle('hide')
+            next.classList.toggle('hide')
+        }
+    }
+    function back() {
+        const curr = cards[currentIndex]
+        const prev = cards[currentIndex - 1]
+        if (prev) {
+            currentIndex -= 1
+            curr.classList.toggle('hide')
+            prev.classList.toggle('hide')
+        }
+    }
+    function togglePeek(e) {
+        const curr = cards[currentIndex]
+        if (curr) {
+            curr.children[0].classList.toggle('hide')
+            curr.children[1].classList.toggle('hide')
+        }
+        if (e.type === "mousedown") document.addEventListener('mouseup', togglePeek)   
+        else document.removeEventListener('mouseup', togglePeek)
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        cards = document.getElementsByClassName('challenge-card')
+        if (cards[0]) { cards[0].classList.toggle('hide') }
+        document.getElementById('next-btn').addEventListener('click', next)
+        document.getElementById('peek-btn').addEventListener('mousedown', togglePeek)
+        document.getElementById('back-btn').addEventListener('click', back)
+    })
+</script>

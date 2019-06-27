@@ -84,4 +84,16 @@ router.route('/:id([0-9]+)')
 router.get('/new', (req,res) => {
     res.send('this is a new collection form')
 })
+
+router.route('/challenge/:id')
+    .get((req,res) => {
+        db.collection.findByPk(req.params.id,{
+            include: [db.card]
+        }).then(collection => {
+            res.render('collections/collections-challenge', {collection, user: req.user})
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send('There was a server-side error!')
+        })
+    })
 module.exports = router;
