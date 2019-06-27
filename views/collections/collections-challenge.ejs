@@ -1,7 +1,8 @@
 <!-- style -->
 <style>
-    .hidden {
-        display: none;
+    .title-row {
+        display: flex;
+        align-items: baseline;
     }
     .challenge-card {
         height: 300px;
@@ -21,9 +22,16 @@
 <!-- markup -->
 <div class="container">
     <h1>Challenge!</h1>
-    <h3><%=collection.name%></h3>
+    <div class="row title-row">
+        <div class="col">
+            <h3><%=collection.name%></h3>
+        </div>
+        <div class="col">
+            <h5><%=collection.description%></h5>
+        </div>
+    </div>
 
-    <div class="row">
+    <div class="row card-row">
         <div class="col s12 m6">
             <div class="card challenge-card hide">
                 <h4>Click next to begin</h4>
@@ -41,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row button-row">
         <div class="toolbar col s12 m6">
             <button id="back-btn" class="btn toolbar-button">Back</button>
             <button id="peek-btn" class="btn toolbar-button">peek</button>
@@ -49,7 +57,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- script -->
 <script> 
