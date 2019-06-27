@@ -43,14 +43,16 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
   successFlash: 'You have logged in!',
   failureRedirect: '/auth/login',
   failureFlash: 'Invalid credentials'
-}));
+  }),
+  (req, res) => res.render('index', { user:req.user })
+);
 
 router.get('/logout', function(req, res) {
   req.logout();
+  req.user = null;
   req.flash('success', 'You have logged out!');
   res.redirect('/')
 })
