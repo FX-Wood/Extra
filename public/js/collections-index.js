@@ -44,18 +44,20 @@ function addCollection(e) {
 }
 
 function mouseDownEditCheck(e) {
-    let target = e.currentTarget
-    console.log('mousedown')
-    console.log('currentTarget', target)
-    let timer = setTimeout(() => {
-        console.log('timeout')
-        editCollection(target)
-        target.scrollIntoView()
-    }, 800)
-    window.addEventListener('mouseup', (e) => {
-        console.log('mouseup')
-        clearTimeout(timer)
-    }, {once: true})
+    if (e.button === 0) { // ignore right clicks
+        let target = e.currentTarget
+        console.log('mousedown')
+        console.log('currentTarget', target)
+        let timer = setTimeout(() => {
+            console.log('timeout')
+            editCollection(target)
+            target.scrollIntoView()
+        }, 800)
+        window.addEventListener('mouseup', (e) => {
+            console.log('mouseup')
+            clearTimeout(timer)
+        }, {once: true})
+    }
 }
 
 function editCollection(target) {
