@@ -7,7 +7,7 @@
     "test": "test"
   },
   "dependencies": {
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^5.0.0",
     "connect-flash": "^0.1.1",
     "connect-session-sequelize": "^6.0.0",
     "dotenv": "^6.2.0",
