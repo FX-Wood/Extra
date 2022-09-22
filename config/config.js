@@ -1,7 +1,7 @@
 require('dotenv').config();
 module.exports = {
     "development": {
-        "DATABASE_URI": process.env.DATABASE_URI,
+        "DATABASE_URL": process.env.DATABASE_URL,
         "options": {
             "dialect": "postgres",
             "dialectOptions": {
@@ -17,7 +17,7 @@ module.exports = {
         "dialect": "postgres"
     },
     "production": {
-        "use_env_variable": "DATABASE_URL",
+        "DATABASE_URL": process.env.DATABASE_URL,
         "options": {
             "dialect": "postgres",
             "dialectOptions": {
