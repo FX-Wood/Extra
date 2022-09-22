@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": "10.15.3"
+  },
   "dependencies": {
     "bcrypt": "^3.0.4",
     "connect-flash": "^0.1.1",
