@@ -12,7 +12,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
-    "connect-session-sequelize": "^6.0.0",
+    "connect-session-sequelize": "^7.1.7",
     "dotenv": "^6.2.0",
     "ejs": "^3.1.10",
     "ejs-lint": "^2.0.0",
@@ -21,13 +21,13 @@
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "markdown-it": "^8.4.2",
-    "materialize-css": "^1.0.0",
+    "materialize-css": "^1.0.0-rc.2",
     "morgan": "^1.9.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^7.14.0",
     "request": "^2.88.2",
-    "sequelize": "^5.22.5",
+    "sequelize": "^6.37.3",
     "sequelize-cli": "^5.4.0"
   },
   "devDependencies": {
