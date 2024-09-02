@@ -7,7 +7,9 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../../config/config.js")[env];
 const db = {};
 
-const sequelize = new Sequelize(config.DATABASE_URL, config.options || {});
+const options = { ...config.options, dialectModule: require("pg") };
+
+const sequelize = new Sequelize(config.DATABASE_URL, options);
 
 fs.readdirSync(__dirname)
   .filter((file) => {
