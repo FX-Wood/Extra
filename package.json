@@ -2,7 +2,6 @@
   "name": "Extra",
   "version": "1.0.0",
   "description": "WDI portfolio project 2",
-  "main": "server.js",
   "directories": {
     "test": "test"
   },
@@ -35,6 +34,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "build": "echo 'noop for vercel automation'",
     "test": "NODE_ENV=test mocha --verbose"
   },
   "repository": {

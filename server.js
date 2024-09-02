@@ -70,6 +70,6 @@ app.use("/collections", require("./controllers/collections"));
 app.use("/cards", require("./controllers/cards"));
 app.use("/define", require("./controllers/twinword"));
 app.use("/parsemd", require("./controllers/markdown-it"));
-var server = app.listen(process.env.PORT || 3000);
 
-module.exports = server;
+module.exports = app;
+// var server = app.listen(process.env.PORT || 3000);
