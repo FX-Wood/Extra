@@ -10,6 +10,7 @@ const isLoggedIn = require("./middleware/isLoggedIn");
 const helmet = require("helmet");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
+app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 app.use(require("morgan")("dev"));
@@ -54,7 +55,6 @@ app.get("/", function (req, res) {
 });
 
 app.get("/profile", isLoggedIn, function (req, res) {
-  console.log("user", req.user);
   // const cards = await db.collection.count({where: {userId: req.user.id}, include: [db.card]})
   // const collections = await db.collection.count({where: {userId: req.user.id}})
   Promise.all([
