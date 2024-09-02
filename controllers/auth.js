@@ -20,7 +20,7 @@ router.post("/signup", function (req, res) {
           password: req.body.password,
         },
       })
-      .spread(function (user, created) {
+      .then(([user, created]) => {
         console.log("In signup, user created: ", created);
         if (created) {
           passport.authenticate("local", {
@@ -29,11 +29,11 @@ router.post("/signup", function (req, res) {
           })(req, res);
         } else {
           console.log("Email already exists");
-          req.flash("error", "email already exists");
+          req.flash("error", "Email already exists");
           res.redirect("/auth/signup");
         }
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
         req.flash("error", error.errors[0].message);
         res.redirect("/auth/signup");
